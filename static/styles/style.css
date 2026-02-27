@@ -141,6 +141,18 @@ td {
   background: var(--answer-bg);
   width: clamp(85%, 60ch, 100%);
   margin-right: auto;
+  position: relative;
+}
+
+.model-badge {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.8rem;
+  font-size: 0.65rem;
+  opacity: 0.4;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  pointer-events: none;
 }
 
 .thinking-hint {

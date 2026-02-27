@@ -52,12 +52,12 @@ output.addEventListener("click", (event) => {
  * and render them in the output area using marked for markdown parsing.
  */
 let lastPromptsStr = localStorage.getItem("lastPrompts");
-let lastPrompts: { prompt: string; response: string }[] = [];
+let lastPrompts: { prompt: string; response: string; model: string }[] = [];
 if (lastPromptsStr) {
   try {
     lastPrompts = JSON.parse(lastPromptsStr);
 
-    for (const { prompt, response } of lastPrompts) {
+    for (const { prompt, response, model } of lastPrompts) {
       const questionDiv = document.createElement("div");
       questionDiv.classList.add("question", "message");
       const rawQuestion = await marked.parse(prompt);
@@ -67,7 +67,9 @@ if (lastPromptsStr) {
       const answerDiv = document.createElement("div");
       answerDiv.classList.add("answer", "message");
       const rawAnswer = await marked.parse(response);
-      answerDiv.innerHTML = DOMPurify.sanitize(rawAnswer);
+      answerDiv.innerHTML =
+        DOMPurify.sanitize(rawAnswer) +
+        `<span class="model-badge">${model}</span>`;
       output.appendChild(answerDiv);
     }
 
@@ -180,7 +182,9 @@ promptForm.addEventListener("submit", async (event) => {
 
       if (fullMarkdown.trim()) {
         const rawMarkdown = await marked.parse(fullMarkdown);
-        newAnswer.innerHTML = DOMPurify.sanitize(rawMarkdown);
+        newAnswer.innerHTML =
+          DOMPurify.sanitize(rawMarkdown) +
+          `<span class="model-badge">${model}</span>`;
       }
 
       window.scrollTo({
@@ -203,7 +207,7 @@ promptForm.addEventListener("submit", async (event) => {
     thinkingHint?.remove();
 
     // Save the prompt and response to localStorage
-    lastPrompts.push({ prompt, response: fullMarkdown });
+    lastPrompts.push({ prompt, response: fullMarkdown, model });
 
     if (lastPrompts.length > 20) {
       lastPrompts.shift();
