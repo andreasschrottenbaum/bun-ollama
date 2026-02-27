@@ -25,13 +25,25 @@
           name="prompt"
           placeholder="Ask me your question"
         ></textarea>
-        <input type="submit" value="Submit" />
+        <div class="prompt-footer">
+          <div>
+            <div class="model-select-wrapper">
+              <select id="model-select" name="model">
+                <option readonly class="loading" selected>Loading...</option>
+              </select>
+            </div>
+          </div>
+          <input type="submit" value="Submit" />
+        </div>
       </form>
     </main>
 
     <footer>
       <span>&copy; 2026 Andreas Schrottenbaum</span>
-      <input type="color" id="color-picker" value="#c0c0c0" />
+      <label
+        >Color:
+        <input type="color" id="color-picker" value="#c0c0c0" />
+      </label>
     </footer>
 
     <script src="scripts/main.ts"></script>

@@ -38,9 +38,11 @@ output.addEventListener("click", (event) => {
     navigator.clipboard.writeText(code);
 
     target.innerText = "Copied!";
+    target.classList.add("copied");
 
     setTimeout(() => {
       target.innerText = "Copy";
+      target.classList.remove("copied");
     }, 2000);
   }
 });
@@ -112,6 +114,7 @@ promptForm.addEventListener("submit", async (event) => {
 
   const formData = new FormData(promptForm);
   const prompt = formData.get("prompt") as string;
+  const model = formData.get("model") as string;
 
   if (!prompt.trim()) return;
 
@@ -144,7 +147,7 @@ promptForm.addEventListener("submit", async (event) => {
     const response = await fetch("/api/ollama", {
       method: "POST",
       signal: abortController?.signal,
-      body: JSON.stringify({ prompt }),
+      body: JSON.stringify({ prompt, model }),
     });
 
     if (!response.ok) {
@@ -223,3 +226,49 @@ function setTextColorBasedOnBackground(hexColor: string) {
   const textColor = brightness > 128 ? "#000000" : "#FFFFFF";
   document.documentElement.style.setProperty("--text-color", textColor);
 }
+
+/**
+ * On page load, fetch the list of available Ollama models from the API and create a dropdown for model selection in the UI.
+ * This allows users to choose which model they want to interact with when sending prompts.
+ */
+const availableModels = await fetch("/api/ollama-models").then((res) =>
+  res.json(),
+);
+const preferredModel =
+  localStorage.getItem("preferredModel") || availableModels[0];
+
+const modelSelect = document.querySelector(
+  "#model-select",
+) as HTMLSelectElement;
+
+const loadingOption = modelSelect.querySelector("option.loading");
+if (loadingOption) {
+  loadingOption.remove();
+}
+
+availableModels.forEach((model: any) => {
+  const option = document.createElement("option");
+  option.value = model.name;
+
+  const sizeGB = (model.size / 1024 ** 3).toFixed(2);
+  option.innerText = `${model.name} (${sizeGB} GB)`;
+
+  if (model.name === preferredModel) {
+    option.selected = true;
+  }
+
+  modelSelect.appendChild(option);
+});
+
+modelSelect.addEventListener("change", () => {
+  const selectedModel = modelSelect.value;
+  localStorage.setItem("preferredModel", selectedModel);
+});
+
+/**
+ * - llama3.2
+ * - mistral
+ * - lfm2
+ * - phi3
+ * - deepseek-r1
+ */

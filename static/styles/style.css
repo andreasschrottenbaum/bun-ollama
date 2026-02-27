@@ -12,7 +12,11 @@
 body {
   margin: 0;
   padding: 1rem;
-  background: var(--primary);
+  background: radial-gradient(
+    var(--primary),
+    oklch(from var(--primary) calc(l * 0.4) c h)
+  );
+  background-attachment: fixed;
   font-family: system-ui;
   display: grid;
   min-height: 100vh;
@@ -71,6 +75,7 @@ textarea {
 input[type="submit"],
 button {
   font-family: inherit;
+  font-size: inherit;
   color: inherit;
   background-color: var(--question-bg);
   border: 1px solid var(--border);
@@ -82,6 +87,12 @@ button {
   &:hover {
     background-color: var(--answer-bg);
   }
+}
+
+.prompt-footer {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
 }
 
 table {
@@ -164,15 +175,20 @@ td {
   .language-label {
     font-size: 0.75rem;
     text-transform: uppercase;
+    color: white;
+    font-weight: bold;
   }
 
   .copy-button {
-    display: none;
+    opacity: 0;
+    font-size: 0.75em;
     padding: 0.25rem 0.5rem;
+    transition: opacity 0.3s;
   }
 
-  &:hover .copy-button {
-    display: block;
+  &:hover .copy-button,
+  .copy-button.copied {
+    opacity: 1;
   }
 
   pre {
@@ -182,4 +198,21 @@ td {
   code {
     border-radius: 0.5rem;
   }
+}
+
+select#model-select {
+  appearance: base-select;
+
+  font-family: inherit;
+  background-color: var(--question-bg);
+  color: var(--text-color);
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+input[type="color"] {
+  background: none;
+  border: none;
 }

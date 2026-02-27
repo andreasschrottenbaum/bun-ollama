@@ -5,10 +5,10 @@ import ollama from "ollama";
  * send the prompt to the Ollama API, and stream the response back to the client.
  */
 async function main(request: Request) {
-  const input = (await request.json()) as { prompt: string };
+  const input = (await request.json()) as { prompt: string; model: string };
 
   const response = await ollama.chat({
-    model: "llama3.2",
+    model: input.model,
     messages: [{ role: "user", content: input.prompt }],
     stream: true,
   });

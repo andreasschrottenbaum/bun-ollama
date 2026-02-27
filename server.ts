@@ -1,5 +1,6 @@
 import homeHTML from "./static/home.html";
 import api_ollama from "./api/ollama";
+import api_ollama_models from "./api/ollama_models";
 
 const faviconFile = Bun.file("./static/ollama-icon.webp");
 
@@ -10,5 +11,8 @@ const server = Bun.serve({
     "/favicon.ico": () => new Response(faviconFile),
     "/favicon.webp": () => new Response(faviconFile),
     "/api/ollama": api_ollama,
+    "/api/ollama-models": api_ollama_models,
   },
 });
+
+export { server };
