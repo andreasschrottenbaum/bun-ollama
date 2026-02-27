@@ -1,0 +1,16 @@
+{
+  "name": "bun-ollama",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "marked": "^17.0.3",
+    "ollama": "^0.6.3"
+  }
+}

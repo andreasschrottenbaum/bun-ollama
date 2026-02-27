@@ -1,0 +1,108 @@
+:root {
+  --primary: #c0c0c0;
+  --question-bg: oklch(from var(--primary) calc(l * 0.8) c h);
+  --answer-bg: oklch(from var(--primary) calc(l * 0.6) c h);
+  --border: oklch(from var(--primary) calc(l * 0.8) c h);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 1rem;
+  background: var(--primary);
+  font-family: system-ui;
+  display: grid;
+  min-height: 100vh;
+  grid-template-rows: auto 1fr auto;
+  max-width: 60rem;
+  margin: auto;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+}
+
+footer {
+  border-top: 1px solid var(--border);
+  margin-top: 1em;
+  padding-top: 1em;
+  display: flex;
+  justify-content: space-between;
+}
+
+form {
+  text-align: end;
+}
+
+textarea {
+  font-family: inherit;
+  border: 1px solid var(--border);
+  background-color: var(--question-bg);
+  width: 100%;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+}
+
+input[type="submit"] {
+  background-color: var(--answer-bg);
+  border: 1px solid var(--border);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 10px 0;
+}
+th,
+td {
+  border: 1px solid var(--border);
+  padding: 8px;
+  text-align: left;
+}
+
+.message {
+  padding: 0.2rem 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  overflow-x: auto;
+}
+
+.question {
+  background: var(--question-bg);
+  max-width: 50%;
+  margin-left: auto;
+}
+
+.answer {
+  background: var(--answer-bg);
+  max-width: 85%;
+  margin-right: auto;
+}
+
+.thinking-hint {
+  &::before {
+    content: "";
+    width: 0.75em;
+    height: 0.75em;
+    border: 2px solid var(--border);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    margin-right: 0.5rem;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

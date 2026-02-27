@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="./favicon.webp" type="image/webp" />
+    <title>Bun/Ollama Playground</title>
+    <link rel="stylesheet" href="styles/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Welcome to Bun/Ollama Playground!</h1>
+    </header>
+
+    <main>
+      <output id="output"></output>
+
+      <form id="prompt-form">
+        <textarea
+          type="text"
+          name="prompt"
+          placeholder="Ask me your question"
+        ></textarea>
+        <input type="submit" value="Submit" />
+      </form>
+    </main>
+
+    <footer>
+      <span>&copy; 2026 Andreas Schrottenbaum</span>
+      <input type="color" id="color-picker" value="#c0c0c0" />
+    </footer>
+
+    <script src="scripts/main.ts"></script>
+  </body>
+</html>
