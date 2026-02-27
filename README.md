@@ -38,7 +38,7 @@ A minimalist, high-performance local AI chat interface built with **Bun**, **Typ
 
 ```bash
 # Clone the repository
-git clone [https://github.com/andreasschrottenbaum/bun-ollama-playground.git](https://github.com/andreasschrottenbaum/bun-ollama-playground.git)
+git clone [https://github.com/andreasschrottenbaum/bun-ollama.git](https://github.com/andreasschrottenbaum/bun-ollama.git)
 
 # Install dependencies
 bun install
