@@ -42,6 +42,7 @@ form {
 
 textarea {
   font-family: inherit;
+  font-size: inherit;
   color: inherit;
   border: 1px solid var(--border);
   background-color: var(--question-bg);
@@ -49,11 +50,15 @@ textarea {
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
   margin: 2em 0 0.5em;
-}
 
-textarea:focus-visible {
-  outline: 2px solid var(--border);
-  border-color: transparent;
+  &:focus-visible {
+    outline: 2px solid var(--border);
+    border-color: transparent;
+  }
+
+  &::placeholder {
+    color: var(--answer-bg);
+  }
 }
 
 input[type="submit"] {

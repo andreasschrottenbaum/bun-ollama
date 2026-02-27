@@ -8,6 +8,34 @@ const colorPicker = document.querySelector("#color-picker") as HTMLInputElement;
 
 let abortController: AbortController | null = null;
 
+/**
+ * On page load, check for any previously stored prompts and responses in localStorage,
+ * and render them in the output area using marked for markdown parsing.
+ */
+let lastPromptsStr = localStorage.getItem("lastPrompts");
+let lastPrompts: { prompt: string; response: string }[] = [];
+if (lastPromptsStr) {
+  try {
+    lastPrompts = JSON.parse(lastPromptsStr);
+
+    for (const { prompt, response } of lastPrompts) {
+      const questionDiv = document.createElement("div");
+      questionDiv.classList.add("question", "message");
+      questionDiv.innerHTML = await marked.parse(prompt);
+      output.appendChild(questionDiv);
+
+      const answerDiv = document.createElement("div");
+      answerDiv.classList.add("answer", "message");
+      answerDiv.innerHTML = await marked.parse(response);
+      output.appendChild(answerDiv);
+    }
+
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+  } catch (e) {
+    console.error("Error parsing last prompts from localStorage:", e);
+  }
+}
+
 /*
  * On page load, check for a stored primary color in localStorage and apply it to the CSS variable.
  * Also set the color picker's value to the stored color and adjust text color for readability.
@@ -70,6 +98,7 @@ promptForm.addEventListener("submit", async (event) => {
   }
 
   abortController = new AbortController();
+  let fullMarkdown = "";
 
   try {
     const response = await fetch("/api/ollama", {
@@ -92,7 +121,6 @@ promptForm.addEventListener("submit", async (event) => {
     const reader = response.body?.getReader();
     const decoder = new TextDecoder();
 
-    let fullMarkdown = "";
     let isFirstChunk = true;
 
     while (reader) {
@@ -129,9 +157,22 @@ promptForm.addEventListener("submit", async (event) => {
   } finally {
     abortController = null;
     thinkingHint?.remove();
+
+    // Save the prompt and response to localStorage
+    lastPrompts.push({ prompt, response: fullMarkdown });
+
+    if (lastPrompts.length > 20) {
+      lastPrompts.shift();
+    }
+
+    localStorage.setItem("lastPrompts", JSON.stringify(lastPrompts));
   }
 });
 
+/**
+ * Automatically set text color based on the brightness of the selected background color for better readability.
+ * @param hexColor Input color to measure
+ */
 function setTextColorBasedOnBackground(hexColor: string) {
   const r = parseInt(hexColor.slice(1, 3), 16);
   const g = parseInt(hexColor.slice(3, 5), 16);
