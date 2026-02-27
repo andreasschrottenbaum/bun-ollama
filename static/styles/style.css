@@ -22,10 +22,17 @@ body {
   color: var(--text-color);
 }
 
+header {
+  text-align: center;
+  margin-bottom: 2em;
+  border-bottom: 1px solid var(--border);
+}
+
 main {
   display: flex;
   flex-direction: column;
   justify-content: end;
+  min-width: 0;
 }
 
 footer {
@@ -61,7 +68,8 @@ textarea {
   }
 }
 
-input[type="submit"] {
+input[type="submit"],
+button {
   font-family: inherit;
   color: inherit;
   background-color: var(--question-bg);
@@ -69,6 +77,11 @@ input[type="submit"] {
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   cursor: pointer;
+  transition: background-color 0.4s;
+
+  &:hover {
+    background-color: var(--answer-bg);
+  }
 }
 
 table {
@@ -130,5 +143,43 @@ td {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+.code-container {
+  position: relative;
+  background: #282c34;
+  padding: 0.5em;
+  border-radius: 0.5rem;
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5em;
+    border-bottom: none;
+    height: 1.5em;
+  }
+
+  .language-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+  }
+
+  .copy-button {
+    display: none;
+    padding: 0.25rem 0.5rem;
+  }
+
+  &:hover .copy-button {
+    display: block;
+  }
+
+  pre {
+    margin: 0.5em 0 0;
+  }
+
+  code {
+    border-radius: 0.5rem;
   }
 }

@@ -1,5 +1,6 @@
-import { marked } from "marked";
-import dompurify from "dompurify";
+import { marked, Renderer } from "marked";
+import hljs from "highlight.js";
+import DOMPurify from "dompurify";
 
 const output = document.querySelector("#output") as HTMLDivElement;
 const promptForm = document.querySelector(
@@ -8,6 +9,41 @@ const promptForm = document.querySelector(
 const colorPicker = document.querySelector("#color-picker") as HTMLInputElement;
 
 let abortController: AbortController | null = null;
+
+/*
+ * Configure marked to use highlight.js for code block syntax highlighting.
+ * This will automatically apply syntax highlighting to any code blocks in the markdown response.
+ */
+const renderer = new Renderer();
+renderer.code = ({ text, lang }) => {
+  const validLang = lang && hljs.getLanguage(lang) ? lang : "plaintext";
+  const highlighted = hljs.highlight(text, { language: validLang }).value;
+
+  return `
+    <div class="code-container">
+      <header>
+        <span class="language-label">${validLang}</span>
+        <button class="copy-button" data-code="${encodeURIComponent(text)}">Copy</button>
+      </header>
+      <pre><code class="hljs language-${validLang}">${highlighted}</code></pre>
+    </div>`;
+};
+
+marked.setOptions({ renderer });
+
+output.addEventListener("click", (event) => {
+  const target = event.target as HTMLElement;
+  if (target.classList.contains("copy-button")) {
+    const code = decodeURIComponent(target.getAttribute("data-code") || "");
+    navigator.clipboard.writeText(code);
+
+    target.innerText = "Copied!";
+
+    setTimeout(() => {
+      target.innerText = "Copy";
+    }, 2000);
+  }
+});
 
 /**
  * On page load, check for any previously stored prompts and responses in localStorage,
@@ -23,13 +59,13 @@ if (lastPromptsStr) {
       const questionDiv = document.createElement("div");
       questionDiv.classList.add("question", "message");
       const rawQuestion = await marked.parse(prompt);
-      questionDiv.innerHTML = dompurify.sanitize(rawQuestion);
+      questionDiv.innerHTML = DOMPurify.sanitize(rawQuestion);
       output.appendChild(questionDiv);
 
       const answerDiv = document.createElement("div");
       answerDiv.classList.add("answer", "message");
       const rawAnswer = await marked.parse(response);
-      answerDiv.innerHTML = dompurify.sanitize(rawAnswer);
+      answerDiv.innerHTML = DOMPurify.sanitize(rawAnswer);
       output.appendChild(answerDiv);
     }
 
@@ -82,7 +118,7 @@ promptForm.addEventListener("submit", async (event) => {
   const newQuestion = document.createElement("div");
   newQuestion.classList.add("question", "message");
   const rawQuestion = await marked.parse(prompt);
-  newQuestion.innerHTML = dompurify.sanitize(rawQuestion);
+  newQuestion.innerHTML = DOMPurify.sanitize(rawQuestion);
   output.appendChild(newQuestion);
 
   promptForm.reset();
@@ -141,7 +177,7 @@ promptForm.addEventListener("submit", async (event) => {
 
       if (fullMarkdown.trim()) {
         const rawMarkdown = await marked.parse(fullMarkdown);
-        newAnswer.innerHTML = dompurify.sanitize(rawMarkdown);
+        newAnswer.innerHTML = DOMPurify.sanitize(rawMarkdown);
       }
 
       window.scrollTo({
