@@ -61,6 +61,7 @@ textarea {
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
   margin: 2em 0 0.5em;
+  min-height: 10em;
 
   &:focus-visible {
     outline: 2px solid var(--border);
@@ -68,7 +69,7 @@ textarea {
   }
 
   &::placeholder {
-    color: var(--answer-bg);
+    color: oklch(from var(--text-color) l c h / 0.3);
   }
 }
 
@@ -206,7 +207,7 @@ select#model-select {
   font-family: inherit;
   background-color: var(--question-bg);
   color: var(--text-color);
-  border: none;
+  border: 1px solid var(--border);
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
   cursor: pointer;
