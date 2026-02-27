@@ -1,8 +1,8 @@
 :root {
   --primary: #c0c0c0;
-  --question-bg: oklch(from var(--primary) calc(l * 0.8) c h);
-  --answer-bg: oklch(from var(--primary) calc(l * 0.6) c h);
-  --border: oklch(from var(--primary) calc(l * 0.8) c h);
+  --question-bg: oklch(from var(--primary) calc(l * 0.85) c h);
+  --answer-bg: oklch(from var(--primary) calc(l * 1.05) c h);
+  --border: oklch(from var(--primary) calc(l * 0.7) c h);
 }
 
 * {
@@ -19,6 +19,7 @@ body {
   grid-template-rows: auto 1fr auto;
   max-width: 60rem;
   margin: auto;
+  color: var(--text-color);
 }
 
 main {
@@ -41,15 +42,24 @@ form {
 
 textarea {
   font-family: inherit;
+  color: inherit;
   border: 1px solid var(--border);
   background-color: var(--question-bg);
   width: 100%;
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
+  margin: 2em 0 0.5em;
+}
+
+textarea:focus-visible {
+  outline: 2px solid var(--border);
+  border-color: transparent;
 }
 
 input[type="submit"] {
-  background-color: var(--answer-bg);
+  font-family: inherit;
+  color: inherit;
+  background-color: var(--question-bg);
   border: 1px solid var(--border);
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
@@ -61,6 +71,7 @@ table {
   width: 100%;
   margin: 10px 0;
 }
+
 th,
 td {
   border: 1px solid var(--border);
@@ -73,17 +84,27 @@ td {
   border-radius: 0.5rem;
   margin-bottom: 1rem;
   overflow-x: auto;
+  box-shadow: 2px 2px 6px var(--border);
+
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+  }
 }
 
 .question {
   background: var(--question-bg);
-  max-width: 50%;
+  width: clamp(50%, 60ch, 100%);
   margin-left: auto;
 }
 
 .answer {
   background: var(--answer-bg);
-  max-width: 85%;
+  width: clamp(85%, 60ch, 100%);
   margin-right: auto;
 }
 

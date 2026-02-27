@@ -21,7 +21,11 @@ async function main(request: Request) {
         try {
           for await (const chunk of response) {
             const content = chunk.message?.content || "";
-            controller.enqueue(encoder.encode(content));
+            try {
+              controller.enqueue(encoder.encode(content));
+            } catch (e) {
+              break;
+            }
           }
         } catch (error) {
           console.error("Error in Ollama API stream:", error);
