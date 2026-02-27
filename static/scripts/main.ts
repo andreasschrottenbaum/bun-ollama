@@ -1,4 +1,5 @@
 import { marked } from "marked";
+import dompurify from "dompurify";
 
 const output = document.querySelector("#output") as HTMLDivElement;
 const promptForm = document.querySelector(
@@ -21,12 +22,14 @@ if (lastPromptsStr) {
     for (const { prompt, response } of lastPrompts) {
       const questionDiv = document.createElement("div");
       questionDiv.classList.add("question", "message");
-      questionDiv.innerHTML = await marked.parse(prompt);
+      const rawQuestion = await marked.parse(prompt);
+      questionDiv.innerHTML = dompurify.sanitize(rawQuestion);
       output.appendChild(questionDiv);
 
       const answerDiv = document.createElement("div");
       answerDiv.classList.add("answer", "message");
-      answerDiv.innerHTML = await marked.parse(response);
+      const rawAnswer = await marked.parse(response);
+      answerDiv.innerHTML = dompurify.sanitize(rawAnswer);
       output.appendChild(answerDiv);
     }
 
@@ -78,7 +81,8 @@ promptForm.addEventListener("submit", async (event) => {
 
   const newQuestion = document.createElement("div");
   newQuestion.classList.add("question", "message");
-  newQuestion.innerHTML = await marked.parse(prompt);
+  const rawQuestion = await marked.parse(prompt);
+  newQuestion.innerHTML = dompurify.sanitize(rawQuestion);
   output.appendChild(newQuestion);
 
   promptForm.reset();
@@ -136,7 +140,8 @@ promptForm.addEventListener("submit", async (event) => {
       fullMarkdown += chunk;
 
       if (fullMarkdown.trim()) {
-        newAnswer.innerHTML = await marked.parse(fullMarkdown);
+        const rawMarkdown = await marked.parse(fullMarkdown);
+        newAnswer.innerHTML = dompurify.sanitize(rawMarkdown);
       }
 
       window.scrollTo({
