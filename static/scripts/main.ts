@@ -1,6 +1,7 @@
 import { marked, Renderer } from "marked";
 import hljs from "highlight.js";
-import DOMPurify from "dompurify";
+
+import * as Utils from "./utils/";
 
 const output = document.querySelector("#output") as HTMLDivElement;
 const promptForm = document.querySelector(
@@ -31,53 +32,43 @@ renderer.code = ({ text, lang }) => {
 
 marked.setOptions({ renderer });
 
-output.addEventListener("click", (event) => {
-  const target = event.target as HTMLElement;
-  if (target.classList.contains("copy-button")) {
-    const code = decodeURIComponent(target.getAttribute("data-code") || "");
-    navigator.clipboard.writeText(code);
-
-    target.innerText = "Copied!";
-    target.classList.add("copied");
-
-    setTimeout(() => {
-      target.innerText = "Copy";
-      target.classList.remove("copied");
-    }, 2000);
-  }
-});
+output.addEventListener("click", Utils.copyTargetToClipboard);
 
 /**
  * On page load, check for any previously stored prompts and responses in localStorage,
  * and render them in the output area using marked for markdown parsing.
  */
-let lastPromptsStr = localStorage.getItem("lastPrompts");
-let lastPrompts: { prompt: string; response: string; model: string }[] = [];
-if (lastPromptsStr) {
-  try {
-    lastPrompts = JSON.parse(lastPromptsStr);
+let lastPrompts: {
+  prompt: string;
+  response: string;
+  model: string;
+  timestamp: number;
+  promptTimestamp: number;
+}[] = Utils.Storage.getHistory();
+for (const {
+  prompt,
+  response,
+  model,
+  timestamp,
+  promptTimestamp,
+} of lastPrompts) {
+  const questionDiv = await Utils.getMessage({
+    text: prompt,
+    type: "question",
+    timestamp: promptTimestamp,
+  });
+  output.appendChild(questionDiv);
 
-    for (const { prompt, response, model } of lastPrompts) {
-      const questionDiv = document.createElement("div");
-      questionDiv.classList.add("question", "message");
-      const rawQuestion = await marked.parse(prompt);
-      questionDiv.innerHTML = DOMPurify.sanitize(rawQuestion);
-      output.appendChild(questionDiv);
-
-      const answerDiv = document.createElement("div");
-      answerDiv.classList.add("answer", "message");
-      const rawAnswer = await marked.parse(response);
-      answerDiv.innerHTML =
-        DOMPurify.sanitize(rawAnswer) +
-        `<span class="model-badge">${model}</span>`;
-      output.appendChild(answerDiv);
-    }
-
-    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-  } catch (e) {
-    console.error("Error parsing last prompts from localStorage:", e);
-  }
+  const answerDiv = await Utils.getMessage({
+    text: response,
+    type: "answer",
+    timestamp,
+    model,
+  });
+  output.appendChild(answerDiv);
 }
+
+window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
 
 /*
  * On page load, check for a stored primary color in localStorage and apply it to the CSS variable.
@@ -120,13 +111,18 @@ promptForm.addEventListener("submit", async (event) => {
 
   if (!prompt.trim()) return;
 
-  const newQuestion = document.createElement("div");
-  newQuestion.classList.add("question", "message");
-  const rawQuestion = await marked.parse(prompt);
-  newQuestion.innerHTML = DOMPurify.sanitize(rawQuestion);
+  const newQuestion = await Utils.getMessage({
+    text: prompt,
+    type: "question",
+  });
   output.appendChild(newQuestion);
+  const promptTimestamp = Date.now();
 
   promptForm.reset();
+  const modelSelect = document.querySelector(
+    "#model-select",
+  ) as HTMLSelectElement;
+  modelSelect.value = model;
 
   const newAnswer = document.createElement("div");
   newAnswer.classList.add("answer", "message");
@@ -144,54 +140,30 @@ promptForm.addEventListener("submit", async (event) => {
 
   abortController = new AbortController();
   let fullMarkdown = "";
+  let now = Date.now();
+  let answerText = "";
 
   try {
-    const response = await fetch("/api/ollama", {
-      method: "POST",
-      signal: abortController?.signal,
-      body: JSON.stringify({ prompt, model }),
-    });
+    await Utils.Ollama.streamPrompt(
+      prompt,
+      model,
+      abortController.signal,
+      (currentText) => {
+        Utils.getMessage({
+          text: currentText,
+          type: "answer",
+          outputElement: newAnswer,
+          model,
+        });
 
-    if (!response.ok) {
-      const errorText = document.createElement("p");
-      errorText.innerText = `Error: ${response.status} ${response.statusText}`;
-      newAnswer.appendChild(errorText);
+        answerText = currentText;
 
-      thinkingHint.remove();
-      return;
-    }
-
-    if (!response.body) return;
-
-    const reader = response.body?.getReader();
-    const decoder = new TextDecoder();
-
-    let isFirstChunk = true;
-
-    while (reader) {
-      const { done, value } = await reader.read();
-      if (done) break;
-
-      if (isFirstChunk) {
-        thinkingHint.remove();
-        isFirstChunk = false;
-      }
-
-      const chunk = decoder.decode(value, { stream: true });
-      fullMarkdown += chunk;
-
-      if (fullMarkdown.trim()) {
-        const rawMarkdown = await marked.parse(fullMarkdown);
-        newAnswer.innerHTML =
-          DOMPurify.sanitize(rawMarkdown) +
-          `<span class="model-badge">${model}</span>`;
-      }
-
-      window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: "smooth",
-      });
-    }
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: "smooth",
+        });
+      },
+    );
   } catch (error: any) {
     if (error.name === "AbortError") {
       const abortText = document.createElement("p");
@@ -207,13 +179,19 @@ promptForm.addEventListener("submit", async (event) => {
     thinkingHint?.remove();
 
     // Save the prompt and response to localStorage
-    lastPrompts.push({ prompt, response: fullMarkdown, model });
+    lastPrompts.push({
+      prompt,
+      response: answerText,
+      model,
+      timestamp: now,
+      promptTimestamp,
+    });
 
     if (lastPrompts.length > 20) {
       lastPrompts.shift();
     }
 
-    localStorage.setItem("lastPrompts", JSON.stringify(lastPrompts));
+    Utils.Storage.saveHistory(lastPrompts);
   }
 });
 
@@ -235,11 +213,8 @@ function setTextColorBasedOnBackground(hexColor: string) {
  * On page load, fetch the list of available Ollama models from the API and create a dropdown for model selection in the UI.
  * This allows users to choose which model they want to interact with when sending prompts.
  */
-const availableModels = await fetch("/api/ollama-models").then((res) =>
-  res.json(),
-);
-const preferredModel =
-  localStorage.getItem("preferredModel") || availableModels[0];
+const availableModels = await Utils.Ollama.getModels();
+const preferredModel = Utils.Storage.getPreferredModel() || availableModels[0];
 
 const modelSelect = document.querySelector(
   "#model-select",
@@ -266,13 +241,5 @@ availableModels.forEach((model: any) => {
 
 modelSelect.addEventListener("change", () => {
   const selectedModel = modelSelect.value;
-  localStorage.setItem("preferredModel", selectedModel);
+  Utils.Storage.savePreferredModel(selectedModel);
 });
-
-/**
- * - llama3.2
- * - mistral
- * - lfm2
- * - phi3
- * - deepseek-r1
- */

@@ -7,9 +7,11 @@ const faviconFile = Bun.file("./static/ollama-icon.webp");
 const server = Bun.serve({
   port: 3000,
   routes: {
-    "/": homeHTML,
     "/favicon.ico": () => new Response(faviconFile),
     "/favicon.webp": () => new Response(faviconFile),
+
+    "/": homeHTML,
+
     "/api/ollama": api_ollama,
     "/api/ollama-models": api_ollama_models,
   },

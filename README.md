@@ -7,7 +7,6 @@ A minimalist, high-performance local AI chat interface built with **Bun**, **Typ
 - **Streaming Responses**: Real-time text generation using the Web Streams API for a smooth "typing" experience.
 - **Smart UI/UX**:
   - **Dynamic Theming**: Powered by the **OKLCH** color space for vibrant and perceptually uniform colors.
-  - **Accessibility**: Automatic text contrast adjustment based on the background brightness (YIQ formula).
   - **Code Highlighting**: Full syntax highlighting with language labels via `highlight.js`.
   - **Copy-to-Clipboard**: Quick-copy buttons integrated into every code block.
 - **Robust Architecture**:

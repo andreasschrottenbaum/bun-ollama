@@ -9,7 +9,13 @@ async function main(request: Request) {
 
   const response = await ollama.chat({
     model: input.model,
-    messages: [{ role: "user", content: input.prompt }],
+    messages: [
+      {
+        role: "system",
+        content: `You are a senior web developer in the year 2026. Use the latest standards you are aware of. If you are unsure, make it clear, that you need more data.`,
+      },
+      { role: "user", content: input.prompt },
+    ],
     stream: true,
   });
 

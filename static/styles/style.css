@@ -3,6 +3,18 @@
   --question-bg: oklch(from var(--primary) calc(l * 0.85) c h);
   --answer-bg: oklch(from var(--primary) calc(l * 1.05) c h);
   --border: oklch(from var(--primary) calc(l * 0.7) c h);
+
+  --hue: 0;
+  --shade-0: oklch(99% 0.05 var(--hue));
+  --shade-1: oklch(90% 0.1 var(--hue));
+  --shade-2: oklch(80% 0.15 var(--hue));
+  --shade-3: oklch(70% 0.2 var(--hue));
+  --shade-4: oklch(60% 0.25 var(--hue));
+  --shade-5: oklch(50% 0.3 var(--hue));
+  --shade-6: oklch(40% 0.35 var(--hue));
+  --shade-7: oklch(30% 0.4 var(--hue));
+  --shade-8: oklch(20% 0.45 var(--hue));
+  --shade-9: oklch(10% 0.5 var(--hue));
 }
 
 * {
@@ -129,30 +141,45 @@ td {
     background: var(--border);
     border-radius: 4px;
   }
+
+  &:hover {
+    .badge {
+      opacity: 0.4;
+    }
+  }
 }
 
 .question {
+  position: relative;
   background: var(--question-bg);
   width: clamp(50%, 60ch, 100%);
   margin-left: auto;
 }
 
 .answer {
+  position: relative;
   background: var(--answer-bg);
   width: clamp(85%, 60ch, 100%);
   margin-right: auto;
-  position: relative;
 }
 
-.model-badge {
+.badge {
   position: absolute;
-  bottom: 0.5rem;
   right: 0.8rem;
   font-size: 0.65rem;
-  opacity: 0.4;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.model-badge {
+  bottom: 0.5rem;
+}
+
+.timestamp {
+  top: 0.5rem;
 }
 
 .thinking-hint {
