@@ -26,7 +26,13 @@ const Ollama = {
 
     while (true) {
       const { done, value } = await reader.read();
-      if (done) break;
+      if (done) {
+        const finalChunk = decoder.decode();
+        fullText += finalChunk;
+
+        if (!fullText) onChunk("An error occured!");
+        break;
+      }
 
       const chunk = decoder.decode(value, { stream: true });
       fullText += chunk;

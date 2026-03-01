@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="./favicon.webp" type="image/webp" />
     <title>Bun/Ollama Playground</title>
-    <link rel="stylesheet" href="styles/style.css" />
+    <!-- <link rel="stylesheet" href="styles/style.css" /> -->
+    <link rel="stylesheet" href="styles/main.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
@@ -17,33 +18,71 @@
     </header>
 
     <main>
-      <output id="output"></output>
+      <output id="output" aria-live="polite" aria-atomic="false"></output>
 
       <form id="prompt-form">
         <textarea
-          type="text"
           name="prompt"
-          placeholder="Ask me your question"
+          placeholder="Ask something..."
+          aria-label="Type your message here"
         ></textarea>
+
         <div class="prompt-footer">
-          <div>
-            <div class="model-select-wrapper">
+          <div class="config-group">
+            <label aria-label="Select AI Model">
               <select id="model-select" name="model">
-                <option readonly class="loading" selected>Loading...</option>
+                <option readonly class="loading" selected>
+                  Loading models...
+                </option>
               </select>
-            </div>
+            </label>
+            <button type="button" id="reset-btn" title="Clear History">
+              Clear History
+            </button>
           </div>
-          <input type="submit" value="Submit" />
+
+          <input type="submit" value="Submit" title="Submit your question" />
         </div>
       </form>
     </main>
 
     <footer>
-      <span>&copy; 2026 Andreas Schrottenbaum</span>
-      <label
-        >Color:
-        <input type="color" id="color-picker" value="#c0c0c0" />
-      </label>
+      <div class="footer-info">
+        <span>&copy; 2026 Andreas Schrottenbaum</span>
+      </div>
+
+      <div class="settings-group">
+        <fieldset class="theme-settings">
+          <legend>Appearance</legend>
+
+          <div class="setting-item">
+            <span class="label-text">Mode:</span>
+            <label class="toggle-switch">
+              <span>Light</span>
+              <input type="checkbox" id="light-dark" />
+              <span class="slider"></span>
+              <span>Dark</span>
+            </label>
+          </div>
+
+          <div class="setting-item">
+            <label for="hue-slider">Hue:</label>
+            <input id="hue-slider" type="range" min="0" max="360" value="245" />
+          </div>
+
+          <div class="setting-item">
+            <label for="chroma-slider">Chroma:</label>
+            <input
+              id="chroma-slider"
+              type="range"
+              min="0"
+              max="1"
+              step="0.05"
+              value="0.25"
+            />
+          </div>
+        </fieldset>
+      </div>
     </footer>
 
     <script src="scripts/main.ts"></script>

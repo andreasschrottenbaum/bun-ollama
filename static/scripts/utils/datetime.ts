@@ -1,4 +1,4 @@
-const timestampFormatter = new Intl.DateTimeFormat("en-UK", {
+const timestampFormatter = new Intl.DateTimeFormat(navigator.language, {
   year: "numeric",
   month: "2-digit",
   day: "2-digit",

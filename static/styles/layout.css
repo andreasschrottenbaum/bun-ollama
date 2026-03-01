@@ -1,0 +1,53 @@
+/* Globale Struktur */
+body {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+
+  background-position: center;
+  background-attachment: fixed;
+  background-image: radial-gradient(
+    circle at 50% 20%,
+    var(--bg-main),
+    var(--bg-gradient-end)
+  );
+  color: var(--text-main);
+}
+
+header {
+  margin-block-end: 1em;
+  padding-block-end: 1em;
+  border-block-end: 3px solid;
+
+  text-align: center;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  min-inline-size: 0;
+}
+
+output {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  inline-size: 100%;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+
+  max-inline-size: 800px;
+  min-inline-size: 20em;
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+
+  padding: 1.5rem;
+
+  background: var(--bg-surface);
+  border-block-start: 1px solid var(--border-subtle);
+}

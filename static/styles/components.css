@@ -1,0 +1,55 @@
+a {
+  color: var(--code-text);
+}
+
+.code-container {
+  margin: 1rem 0;
+
+  background: var(--code-bg);
+  border: 1px solid var(--border-strong);
+  border-radius: 0.75rem;
+  color: var(--code-text);
+
+  overflow-x: auto;
+
+  & header {
+    display: flex;
+    justify-content: space-between;
+
+    padding: 0.5rem 1rem;
+
+    background: oklch(from var(--code-bg) calc(l + 5%) c h);
+
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+
+    button {
+      font-size: 80%;
+      padding: 0.25rem 0.5rem;
+    }
+  }
+}
+
+.badge {
+  position: absolute;
+  inset-inline-end: 2em;
+
+  font-size: 60%;
+  color: var(--text-muted);
+
+  opacity: 0;
+  transition: opacity 0.4s;
+
+  &.timestamp {
+    inset-block-start: 0.5em;
+  }
+
+  &.model {
+    inset-block-end: 0.5em;
+  }
+}
+
+.message:hover .badge {
+  opacity: 0.4;
+}

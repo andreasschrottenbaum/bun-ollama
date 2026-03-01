@@ -1,0 +1,56 @@
+:root {
+  --swatch-0: oklch(99% calc(0.05 * var(--chroma-factor)) var(--hue));
+  --swatch-1: oklch(90% calc(0.15 * var(--chroma-factor)) var(--hue));
+  --swatch-2: oklch(80% calc(0.25 * var(--chroma-factor)) var(--hue));
+  --swatch-3: oklch(70% calc(0.35 * var(--chroma-factor)) var(--hue));
+  --swatch-4: oklch(60% calc(0.39 * var(--chroma-factor)) var(--hue));
+  --swatch-5: oklch(50% calc(0.39 * var(--chroma-factor)) var(--hue));
+  --swatch-6: oklch(40% calc(0.35 * var(--chroma-factor)) var(--hue));
+  --swatch-7: oklch(30% calc(0.25 * var(--chroma-factor)) var(--hue));
+  --swatch-8: oklch(20% calc(0.15 * var(--chroma-factor)) var(--hue));
+  --swatch-9: oklch(10% calc(0.05 * var(--chroma-factor)) var(--hue));
+
+  /* Surface & Layout */
+  --bg-main: var(--swatch-0);
+  --bg-surface: var(--swatch-1);
+  --bg-gradient-end: var(--swatch-2);
+  --border-subtle: var(--swatch-2);
+  --border-strong: var(--swatch-3);
+
+  /* Text Levels */
+  --text-main: var(--swatch-9);
+  --text-muted: var(--swatch-7);
+  --text-on-brand: var(--swatch-0);
+
+  /* Interaction (Buttons, Sliders, Links) */
+  --brand-primary: var(--swatch-5);
+  --brand-hover: var(--swatch-4);
+  --brand-soft: oklch(from var(--swatch-5) l c h / 0.1);
+
+  /* Chat Specifics */
+  --bubble-user: var(--swatch-1);
+  --bubble-ai: transparent;
+  --code-bg: var(--swatch-9);
+  --code-text: var(--swatch-1);
+}
+
+body.dark {
+  --bg-main: var(--swatch-7);
+  --bg-surface: var(--swatch-8);
+  --bg-gradient-end: var(--swatch-9);
+  --border-subtle: var(--swatch-6);
+  --border-strong: var(--swatch-5);
+
+  --text-main: var(--swatch-0);
+  --text-muted: var(--swatch-2);
+  --text-on-brand: var(--swatch-0);
+
+  --brand-primary: var(--swatch-4);
+  --brand-hover: var(--swatch-3);
+  --brand-soft: oklch(from var(--swatch-4) l c h / 0.2);
+
+  --bubble-user: var(--swatch-6);
+  --bubble-ai: transparent;
+  --code-bg: oklch(5% calc(0.02 * var(--chroma-factor)) var(--hue));
+  --code-text: var(--swatch-1);
+}

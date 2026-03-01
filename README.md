@@ -9,6 +9,7 @@ A minimalist, high-performance local AI chat interface built with **Bun**, **Typ
   - **Dynamic Theming**: Powered by the **OKLCH** color space for vibrant and perceptually uniform colors.
   - **Code Highlighting**: Full syntax highlighting with language labels via `highlight.js`.
   - **Copy-to-Clipboard**: Quick-copy buttons integrated into every code block.
+  - **Accessibility (A11Y)**: Screenreader-ready with `aria-live` regions and optimized focus management for a seamless keyboard-only experience.
 - **Robust Architecture**:
   - **Auto-Abort**: Uses `AbortController` to cancel pending streams when a new prompt is sent.
   - **Chat History**: Persists the last 20 conversations in `localStorage`.
@@ -31,7 +32,7 @@ A minimalist, high-performance local AI chat interface built with **Bun**, **Typ
 ### Prerequisites
 
 1. Install [Bun](https://bun.sh/).
-2. Install and run [Ollama](https://ollama.ai/) (defaulting to port `11434`).
+2. Install and run [Ollama](https://ollama.ai/) (defaulting to port `11434`) as well as your desired model(s).
 
 ### Installation
 
@@ -43,5 +44,9 @@ git clone [https://github.com/andreasschrottenbaum/bun-ollama.git](https://githu
 bun install
 
 # Run the application
-bun run server
+bun server
 ```
+
+### ⚠️ Note on Performance
+
+If you are running large models on a CPU, you might encounter a timeout (default 10s in Bun). You can adjust the `idleTimeout` in `server.ts` if your Ollama instance takes longer to generate the first token.

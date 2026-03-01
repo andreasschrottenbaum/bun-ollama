@@ -1,0 +1,55 @@
+.message {
+  position: relative;
+  display: block;
+  max-inline-size: 85%;
+  min-inline-size: 10em;
+  padding: 1rem 1.25rem;
+  /* overflow-x: auto; */
+
+  border-radius: 1rem;
+
+  line-height: 1.6;
+
+  &.question {
+    align-self: flex-end;
+
+    background-color: var(--bubble-user);
+    border: 1px solid var(--border-subtle);
+    border-end-end-radius: 0.25rem;
+    box-shadow: 0 4px 12px oklch(0% 0 0 / 0.05);
+  }
+
+  &.answer {
+    align-self: flex-start;
+    max-inline-size: 100%;
+
+    background-color: var(--bubble-ai);
+    border-inline-start: 3px solid var(--brand-primary);
+    border-radius: 0;
+  }
+
+  & p {
+    margin: 0 0 1rem 0;
+    &:last-child {
+      margin-block-end: 0;
+    }
+  }
+
+  & table {
+    inline-size: 100%;
+
+    margin: 10px 0;
+    border-collapse: collapse;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  & th,
+  & td {
+    padding: 8px;
+
+    border: 1px solid var(--border-subtle);
+
+    text-align: start;
+  }
+}
