@@ -1,4 +1,4 @@
-import homeHTML from "./static/home.html";
+import indexHTML from "./static/index.html";
 import api_ollama from "./api/ollama";
 import api_ollama_models from "./api/ollama_models";
 
@@ -10,7 +10,7 @@ const server = Bun.serve({
     "/favicon.ico": () => new Response(faviconFile),
     "/favicon.webp": () => new Response(faviconFile),
 
-    "/": homeHTML,
+    "/": indexHTML,
 
     "/api/ollama": api_ollama,
     "/api/ollama-models": api_ollama_models,

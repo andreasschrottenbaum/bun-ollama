@@ -44,7 +44,7 @@ git clone [https://github.com/andreasschrottenbaum/bun-ollama.git](https://githu
 bun install
 
 # Run the application
-bun server
+bun index
 ```
 
 ### ⚠️ Note on Performance

@@ -64,6 +64,8 @@ Utils.UI.elements.promptForm.addEventListener("submit", async (event) => {
       model,
       abortController.signal,
       (currentText) => {
+        thinkingHint?.remove();
+
         answerText = currentText;
         Utils.getMessage({
           text: currentText,
@@ -81,7 +83,6 @@ Utils.UI.elements.promptForm.addEventListener("submit", async (event) => {
       Object.assign(document.createElement("p"), { innerText: errorMsg }),
     );
   } finally {
-    thinkingHint.remove();
     abortController = null;
 
     // History Management
