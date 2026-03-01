@@ -4,11 +4,15 @@
   max-inline-size: 85%;
   min-inline-size: 10em;
   padding: 1rem 1.25rem;
-  /* overflow-x: auto; */
 
   border-radius: 1rem;
 
   line-height: 1.6;
+  overflow-wrap: break-word;
+
+  * {
+    hyphens: auto;
+  }
 
   &.question {
     align-self: flex-end;
@@ -36,19 +40,23 @@
   }
 
   & table {
+    display: block;
+
     inline-size: 100%;
 
     margin: 10px 0;
     border-collapse: collapse;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
+
+    table-layout: auto;
   }
 
   & th,
   & td {
     padding: 8px;
 
-    border: 1px solid var(--border-subtle);
+    border: 1px solid var(--border-strong);
 
     text-align: start;
   }
