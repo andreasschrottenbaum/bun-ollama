@@ -1,52 +1,64 @@
-# Bun-Ollama Playground 🧪
+# 🚀 Ollama Web UI
 
-A minimalist, high-performance local AI chat interface built with **Bun**, **TypeScript**, and modern **CSS**. This playground provides a clean, distraction-free environment to interact with your local Ollama models.
+A minimalist, high-performance web interface for your local Ollama models. Built with **Bun**, **TypeScript**, and modern **CSS (OKLCH)**.
+
+[Live Demo](https://andreasschrottenbaum.github.io/bun-ollama/)
 
 ## ✨ Features
 
-- **Streaming Responses**: Real-time text generation using the Web Streams API for a smooth "typing" experience.
-- **Smart UI/UX**:
-  - **Dynamic Theming**: Powered by the **OKLCH** color space for vibrant and perceptually uniform colors.
-  - **Code Highlighting**: Full syntax highlighting with language labels via `highlight.js`.
-  - **Copy-to-Clipboard**: Quick-copy buttons integrated into every code block.
-  - **Accessibility (A11Y)**: Screenreader-ready with `aria-live` regions and optimized focus management for a seamless keyboard-only experience.
-- **Robust Architecture**:
-  - **Auto-Abort**: Uses `AbortController` to cancel pending streams when a new prompt is sent.
-  - **Chat History**: Persists the last 20 conversations in `localStorage`.
-  - **XSS Protection**: All Markdown output is sanitized using `DOMPurify`.
-- **Developer Friendly**:
-  - `Ctrl + Enter` to submit.
-  - Clean TypeScript codebase.
-  - Minimal dependencies.
+- **Streaming Architecture**: Real-time response rendering with a natural typing effect.
+- **Modern Theming**: Fully dynamic color system using the **OKLCH** color space for perceptually uniform colors.
+- **Robust Markdown**: Full support for tables, task lists, and syntax-highlighted code blocks (via Marked.js & DOMPurify).
+- **Responsive Design**: Optimized for devices from 330px up to 4K desktops.
+- **Local-First**: No data leaves your machine. Communicates directly with your local Ollama instance.
+- **Demo Mode**: Automatic fallback to a simulated environment when hosted on static platforms like GitHub Pages.
 
 ## 🛠 Tech Stack
 
-- **Runtime**: [Bun](https://bun.sh/)
-- **Markdown Parser**: [Marked](https://marked.js.org/)
-- **Syntax Highlighting**: [Highlight.js](https://highlightjs.org/)
-- **Security**: [DOMPurify](https://github.com/cure53/dompurify)
-- **Styling**: Modern CSS (Nesting, Custom Properties, OKLCH)
+- **Runtime:** [Bun](https://bun.sh/)
+- **Language:** TypeScript
+- **Bundler:** Bun.build (Zero-config bundling)
+- **Styling:** Modern CSS (Nesting, Variables, Container Queries)
+- **CI/CD:** GitHub Actions for automated deployment
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-1. Install [Bun](https://bun.sh/).
-2. Install and run [Ollama](https://ollama.ai/) (defaulting to port `11434`) as well as your desired model(s).
+Ensure you have [Ollama](https://ollama.com/) installed and running locally.
 
 ### Installation
 
+1. Clone the repository:
+
+   ```bash
+   git clone [https://github.com/andreasschrottenbaum/bun-ollama.git](https://github.com/andreasschrottenbaum/bun-ollama.git)
+   cd bun-ollama
+   ```
+
+2. Install dependencies:
+   ```bash
+   bun install
+   ```
+
+### Running Locally
+
+Start the development server:
+
 ```bash
-# Clone the repository
-git clone [https://github.com/andreasschrottenbaum/bun-ollama.git](https://github.com/andreasschrottenbaum/bun-ollama.git)
-
-# Install dependencies
-bun install
-
-# Run the application
 bun index
 ```
 
-### ⚠️ Note on Performance
+Open http://localhost:3000 in your browser.
 
-If you are running large models on a CPU, you might encounter a timeout (default 10s in Bun). You can adjust the `idleTimeout` in `server.ts` if your Ollama instance takes longer to generate the first token.
+## 📦 Build & Deployment
+
+```bash
+bun run build
+```
+
+This script cleans the `dist` directory, bundles the assets, and prepares the favicon for deployment.
+
+<hr>
+
+_Created with passion for clean code and local AI._
