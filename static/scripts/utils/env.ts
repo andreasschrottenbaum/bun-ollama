@@ -7,7 +7,7 @@ if (isOffline) {
   document.head.appendChild(baseEl);
 
   const githubBadge = document.createElement("div");
-  githubBadge.style.position = "sticky";
+  githubBadge.style.position = "fixed";
   githubBadge.style.top = "0";
   githubBadge.style.right = "0";
   githubBadge.style.textAlign = "right";
