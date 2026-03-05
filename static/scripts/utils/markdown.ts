@@ -1,4 +1,3 @@
-// src/utils/markdown.ts
 import { marked, Renderer } from "marked";
 import hljs from "highlight.js";
 
